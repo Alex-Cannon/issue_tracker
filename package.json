@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "",
-    "start": "nodemon index"
+    "test": "mocha",
+    "start": "npm run test && nodemon index"
   },
   "repository": {
     "type": "git",
@@ -19,9 +19,12 @@
   "homepage": "https://github.com/Alex-Cannon/issue_tracker#readme",
   "dependencies": {
     "chai": "^4.2.0",
+    "dotenv": "^7.0.0",
     "express": "^4.16.4",
     "helmet": "^3.16.0",
-    "mocha": "^6.0.2"
+    "mocha": "^6.0.2",
+    "mongodb": "^3.1.13",
+    "mongoose": "^5.4.19"
   },
   "devDependencies": {
     "eslint": "^5.15.1",
