@@ -1,0 +1,15 @@
+input[type=text], .btn {
+  padding: 0.35em 0.5em;
+  margin-bottom: 5px;
+  border-radius: 3px;
+  width: 350px;
+  max-width: 100%;
+}
+
+input[type=text] {
+  border: 1px solid #aaa;
+}
+
+.badge {
+  font-size: 1.4rem;
+}

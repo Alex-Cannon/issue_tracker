@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 });
 
 // Handle Project page
-app.get('/issues/:project_name', (req, res) => {
+app.get('/:project_name', (req, res) => {
   res.sendFile(path.join(__dirname, './public/pages/project.html'));
 });
 
