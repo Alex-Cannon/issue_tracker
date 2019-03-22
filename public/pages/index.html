@@ -37,20 +37,20 @@
         <input type="text" name="status_text" placeholder="(opt) Status text"/><br/>
         <input type="submit" class="btn btn-primary" value="Submit Issue"/>
       </form><br/><br/>
-      <form>
+      <form id="update-issue">
         <h3>Update issue on test_project</h3>
-        <input type="text" placeholder="_id"/><br/>
-        <input type="text" placeholder="(opt) Title"/><br/>
-        <input type="text" placeholder="(opt) Text"/><br/>
-        <input type="text" placeholder="(opt) Created by"/><br/>
-        <input type="text" placeholder="(opt) Assigned to"/><br/>
-        <input type="text" placeholder="(opt) Status text"/><br/>
-        <input type="checkbox"/><label>Check to close issue.</label><br/>
+        <input type="text" name="_id" placeholder="_id"/><br/>
+        <input type="text" name="issue_title" placeholder="(opt) Title"/><br/>
+        <input type="text" name="issue_text" placeholder="(opt) Text"/><br/>
+        <input type="text" name="created_by" placeholder="(opt) Created by"/><br/>
+        <input type="text" name="assigned_to" placeholder="(opt) Assigned to"/><br/>
+        <input type="text" name="status_text" placeholder="(opt) Status text"/><br/>
+        <input type="checkbox" name="open" checked/><label>Issue Open?</label><br/>
         <input type="submit" class="btn btn-warning" value="Update Issue"/>
       </form><br/><br/>
-      <form>
+      <form id="delete-issue">
         <h3>Delete an issue on test_project</h3>
-        <input type="text" placeholder="_id"/><br/>
+        <input type="text" name="_id" placeholder="_id"/><br/>
         <input type="submit" class="btn btn-danger" value="Delete Issue"/>
       </form><br/><br/>
       

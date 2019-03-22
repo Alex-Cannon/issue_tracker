@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { projectExists, requireProjectName } = require('./utils.js');
+const ObjectID = require('mongodb').ObjectID;
 const schema = require('./schema.js');
 const project = schema.Project;
 
@@ -14,9 +15,9 @@ router.post('/issues/:project_name', requireProjectName, (req, res) => {
     if (err) { return res.status(500).send('Internal Server error.'); }
     if (exists) {
       // Add Issue to Project
-      project.update(req.params.project_name, { $push: { issues: req.body } }, (err, doc) => {
+      project.updateOne({ project_name: req.params.project_name }, { $addToSet: { issues: req.body } }, (err) => {
         if (err) { return res.status(500).send(err); }
-        return res.json(doc.issues[doc.issues.length - 1]);
+        return res.sendStatus(200);
       });
     } else {
       // Add Issue to NEW Project
@@ -35,12 +36,24 @@ router.post('/issues/:project_name', requireProjectName, (req, res) => {
 
 // EDIT project given { _id }
 router.put('/issues/:project_name', requireProjectName, (req, res) => {
-  // Update {updated_on}
+  console.log('updating...');
+  console.log(req.body);
+  const _id = new ObjectID(req.body._id);
+  delete req.body._id;
+  project.updateOne({ project_name: req.params.project_name, 'issues._id': _id }, { $set: bodyToSet(req.body) }, (err) => {
+    if (err) { return res.status(500).send(err); }
+    return res.sendStatus(200);
+  });
 });
 
 // DELETE project given { _id }
 router.delete('/issues/:project_name', requireProjectName, (req, res) => {
-
+  const _id = new ObjectID(req.body._id);
+  delete req.body._id;
+  project.updateOne({ project_name: req.params.project_name, 'issues._id': _id }, { $pull: { 'issues': { _id } } }, (err) => {
+    if (err) { return res.status(500).send(err); }
+    return res.sendStatus(200);
+  });
 });
 
 // GET project given { project_name }
@@ -52,5 +65,14 @@ router.get('/issues/:project_name', (req, res) => {
     return res.json(doc);
   });
 });
+
+const bodyToSet = function (body) {
+  var setObj = {};
+  Object.keys(body).forEach((key) => {
+    setObj['issues.$.' + key] = body[key];
+  });
+  console.log(setObj);
+  return setObj;
+};
 
 module.exports = router;
