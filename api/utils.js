@@ -16,6 +16,7 @@ module.exports = {
       next();
     } else {
       res.status(400).send('Project Name Required');
+      return false;
     }
   }
 };

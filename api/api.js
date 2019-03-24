@@ -36,8 +36,6 @@ router.post('/issues/:project_name', requireProjectName, (req, res) => {
 
 // EDIT project given { _id }
 router.put('/issues/:project_name', requireProjectName, (req, res) => {
-  console.log('updating...');
-  console.log(req.body);
   const _id = new ObjectID(req.body._id);
   delete req.body._id;
   project.updateOne({ project_name: req.params.project_name, 'issues._id': _id }, { $set: bodyToSet(req.body) }, (err) => {
