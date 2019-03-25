@@ -45,9 +45,14 @@ describe('requireProjectName()', function () {
 });
 
 describe('API Endpoints OK?', function () {
+  // Setup App
   app.use(bodyParser.json({ extended: false }));
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use('/api', routes);
+
+  // Variables
+  var testId;
+
   it('Should Run OK.', function (done) {
     app.listen(PORT, function () {
       done();
@@ -57,11 +62,45 @@ describe('API Endpoints OK?', function () {
   it('GET /api/issues/:project_name should return an Object.', function (done) {
     axios.get('/api/issues/test_project')
       .then(function (res) {
-        assert.isObject(res);
+        assert.isObject(res.data);
         done();
       })
       .catch(function (err) {
-        assert.fail(err.statusMessage);
+        assert.fail(err);
+      });
+  });
+
+  it('POST /api/issues/:project_name should return an Object.', function (done) {
+    axios.post('/api/issues/test_project', { issue_title: 'test', issue_text: 'test', created_by: 'test' })
+      .then(function (res) {
+        assert.isObject(res.data);
+        testId = res.data._id;
+        done();
+      })
+      .catch(function (err) {
+        assert.fail(err);
+      });
+  });
+
+  it('PUT /api/issues/:project_name should return status 200.', function (done) {
+    axios.put('/api/issues/test_project', { _id: testId, issue_title: 'test2' })
+      .then(function (res) {
+        assert.strictEqual(res.status, 200);
+        done();
+      })
+      .catch(function (err) {
+        assert.fail(err);
+      });
+  });
+
+  it('DELETE /api/issues/:project_name should return status 200.', function (done) {
+    axios.delete('/api/issues/test_project', { data: { _id: testId } })
+      .then(function (res) {
+        assert.strictEqual(res.status, 200);
+        done();
+      })
+      .catch(function (err) {
+        assert.fail(err);
       });
   });
 

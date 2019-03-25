@@ -15,9 +15,9 @@ router.post('/issues/:project_name', requireProjectName, (req, res) => {
     if (err) { return res.status(500).send('Internal Server error.'); }
     if (exists) {
       // Add Issue to Project
-      project.updateOne({ project_name: req.params.project_name }, { $addToSet: { issues: req.body } }, (err) => {
+      project.findOneAndUpdate({ project_name: req.params.project_name }, { $addToSet: { issues: req.body } }, { new: true }, (err, doc) => {
         if (err) { return res.status(500).send(err); }
-        return res.sendStatus(200);
+        return res.json(doc.issues[doc.issues.length - 1]);
       });
     } else {
       // Add Issue to NEW Project
@@ -48,7 +48,7 @@ router.put('/issues/:project_name', requireProjectName, (req, res) => {
 router.delete('/issues/:project_name', requireProjectName, (req, res) => {
   const _id = new ObjectID(req.body._id);
   delete req.body._id;
-  project.updateOne({ project_name: req.params.project_name, 'issues._id': _id }, { $pull: { 'issues': { _id } } }, (err) => {
+  project.updateOne({ project_name: req.params.project_name, 'issues._id': _id }, { $pull: { 'issues': { _id } } }, (err, r) => {
     if (err) { return res.status(500).send(err); }
     return res.sendStatus(200);
   });
@@ -69,7 +69,6 @@ const bodyToSet = function (body) {
   Object.keys(body).forEach((key) => {
     setObj['issues.$.' + key] = body[key];
   });
-  console.log(setObj);
   return setObj;
 };
 
