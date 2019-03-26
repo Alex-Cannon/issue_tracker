@@ -10,6 +10,7 @@ const routes = require('../api/api.js');
 const axios = require('axios');
 
 const PORT = process.env.PORT || 80;
+const BASE = ('http://localhost:' || process.env.BASE) + PORT;
 mongoose.connect(process.env.DB_URI, { useNewUrlParser: true });
 const db = mongoose.connection;
 
@@ -55,23 +56,13 @@ describe('API Endpoints OK?', function () {
 
   it('Should Run OK.', function (done) {
     app.listen(PORT, function () {
+      console.log('App Listening');
       done();
     });
   });
 
-  it('GET /api/issues/:project_name should return an Object.', function (done) {
-    axios.get('/api/issues/test_project')
-      .then(function (res) {
-        assert.isObject(res.data);
-        done();
-      })
-      .catch(function (err) {
-        assert.fail(err);
-      });
-  });
-
   it('POST /api/issues/:project_name should return an Object.', function (done) {
-    axios.post('/api/issues/test_project', { issue_title: 'test', issue_text: 'test', created_by: 'test' })
+    axios.post(BASE + '/api/issues/test_project', { issue_title: 'test', issue_text: 'test', created_by: 'test' })
       .then(function (res) {
         assert.isObject(res.data);
         testId = res.data._id;
@@ -83,7 +74,7 @@ describe('API Endpoints OK?', function () {
   });
 
   it('PUT /api/issues/:project_name should return status 200.', function (done) {
-    axios.put('/api/issues/test_project', { _id: testId, issue_title: 'test2' })
+    axios.put(BASE + '/api/issues/test_project', { _id: testId, issue_title: 'test2' })
       .then(function (res) {
         assert.strictEqual(res.status, 200);
         done();
@@ -93,8 +84,19 @@ describe('API Endpoints OK?', function () {
       });
   });
 
+  it('GET /api/issues/:project_name should return an Object.', function (done) {
+    axios.get(BASE + '/api/issues/test_project')
+      .then(function (res) {
+        assert.isObject(res.data);
+        done();
+      })
+      .catch(function (err) {
+        assert.fail(err);
+      });
+  });
+
   it('DELETE /api/issues/:project_name should return status 200.', function (done) {
-    axios.delete('/api/issues/test_project', { data: { _id: testId } })
+    axios.delete(BASE + '/api/issues/test_project', { data: { _id: testId } })
       .then(function (res) {
         assert.strictEqual(res.status, 200);
         done();
