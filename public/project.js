@@ -8,7 +8,6 @@ $(document).ready(function () {
         $("#title").text('Issue Tracker - ' + data.project_name);
         $("#project-issues").empty();
         data.issues.map((issue) => {
-          alert(JSON.stringify(issue));
           $("#project-issues").append(
             '<div class="card">' +
               '<div class="card-body">' +
